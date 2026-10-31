@@ -55,3 +55,23 @@
 @media(prefers-contrast:more){.hero-identity,.dark .hero-identity{background:var(--background);border-color:var(--foreground);box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}.hero .hero-signature>span,.dark .hero .hero-signature>span{color:var(--foreground)}}
 
 .section-intro{justify-content:center;text-align:center}
+
+/* Letras entram de cima para baixo; as palavras mantêm a quebra natural. */
+.letter-reveal{display:inline}
+.letter-word{display:inline-block;white-space:nowrap}
+.letter-char{display:inline-block;animation:letter-drop-in .64s cubic-bezier(.22,.75,.25,1) both;animation-delay:calc(var(--reveal-delay,.1s) + var(--letter-index,0)*18ms)}
+@keyframes letter-drop-in{from{opacity:0;transform:translate3d(0,-.65em,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+.hero .hero-signature{margin:0;text-shadow:0 1px 18px rgba(247,248,246,.8)}
+.hero .hero-signature>.hero-first-name{display:inline;margin:0;color:var(--foreground)}
+.hero .hero-signature>.hero-surname{color:#526c5b}
+.dark .hero .hero-signature{text-shadow:0 1px 18px rgba(13,17,15,.9)}
+.dark .hero .hero-signature>.hero-surname{color:#bad4c3}
+@media(max-width:650px){.hero .hero-signature>.hero-surname{display:block;margin-top:.16em}.hero .hero-signature>.hero-first-name{display:inline;margin:0}}
+@media(prefers-reduced-motion:reduce){.letter-char{animation:none!important;opacity:1;transform:none}}
+
+/* Compact title hierarchy */
+.hero{padding-bottom:.35rem}
+.hero .hero-signature{font-weight:750;line-height:1.04}
+.challenge-section{padding-top:.35rem}
+.section-intro h2{font-weight:450;margin:.15rem 0 0;line-height:1.25}
+@media(max-width:650px){.hero{padding-bottom:.25rem}.challenge-section{padding-top:.3rem}.hero .hero-signature>.hero-surname{margin-top:.08em}}

@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useReducedMotion, type PanInfo } from "framer-
 import { ArrowLeft, ArrowRight, SquareArrowOutUpRight } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { LetterReveal } from "@/components/ui/letter-reveal";
 
 export type CardStackItem = {
   id: string | number;
@@ -188,7 +189,7 @@ function DefaultFanCard({ item, active }: { item: CardStackItem; active: boolean
     <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/10 to-black/5" />
     <div className="card-topline"><span>{item.tag || "Desafio CITi"}</span><span className="card-corner" aria-hidden="true"><SquareArrowOutUpRight size={15} /></span></div>
     <div className="relative z-10 flex h-full flex-col justify-end p-7 text-left">
-      <h3 className="text-[clamp(1.5rem,3vw,2.1rem)] font-semibold leading-tight tracking-[-0.04em] text-white">{item.title}</h3>
+      <h3 className="text-[clamp(1.5rem,3vw,2.1rem)] font-semibold leading-tight tracking-[-0.04em] text-white"><LetterReveal text={item.title} delay={0.2} /></h3>
       {item.description && <p className="mt-2 max-w-sm text-xs leading-relaxed text-white/85">{item.description}</p>}
       <span className="sr-only">{active ? "Cartão selecionado" : "Selecione para ver os detalhes"}</span>
     </div>

@@ -175,3 +175,8 @@ O componente fornecido foi integrado em `components/ui/shader-metal.tsx` como fu
 O fundo limita a resolução e a taxa de desenho a 24 quadros por segundo, pausa em abas ocultas e respeita a preferência por menos movimento. Em alto contraste ou com menos transparência, fica oculto para priorizar a leitura. Se WebGL não estiver disponível, o fundo estático permanece. O nome do topo foi ajustado para “Davi Rosendo”, sem ponto.
 
 A renderização do fundo também pausa durante interações com os cartões e volta ao soltar o ponteiro. O teste de arraste confere essa pausa e a retomada, além da troca de cartão. Esse teste tem orçamento de 60 segundos para execução com GPU por software no CI; os demais mantêm 30 segundos.
+
+
+## Entrada dos títulos
+
+`components/ui/letter-reveal.tsx` faz a entrada de cima para baixo com um pequeno intervalo entre letras, usando apenas transform e opacidade. As palavras preservam os espaços e as quebras naturais. O nome acessível continua inteiro, sem leitura letra a letra. O efeito não fica repetindo e é desativado quando há preferência por menos movimento. Foi aplicado ao nome principal e aos títulos das entregas. O box do título principal foi removido; a caixa de leitura da seção da jornada foi mantida.

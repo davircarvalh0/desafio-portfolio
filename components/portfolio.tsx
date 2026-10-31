@@ -5,6 +5,7 @@ import { ArrowUpRight, Github, FileText, FlaskConical, Layers3, BarChart3, Megap
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import CardStackDemo from "@/components/card-stack-demo";
 import { ShaderMetal } from "@/components/ui/shader-metal";
+import { LetterReveal } from "@/components/ui/letter-reveal";
 import { Button } from "@/components/ui/button";
 import { projects, type Project } from "@/lib/projects";
 
@@ -44,10 +45,10 @@ export default function Portfolio() {
     </header>
     <main id="inicio">
       <section className="hero content-shell" aria-labelledby="hero-title">
-        <div className="hero-identity"><h1 id="hero-title" className="hero-signature">Davi Rosendo <span>Carvalho</span></h1></div>
+        <h1 id="hero-title" className="hero-signature"><LetterReveal text="Davi Rosendo" className="hero-first-name" /> <span className="hero-surname"><LetterReveal text="Carvalho" offset={13} /></span></h1>
       </section>
       <section id="desafios" className="challenge-section" aria-labelledby="challenge-title">
-        <div className="section-intro content-shell"><div><h2 id="challenge-title">Cada área, uma descoberta.</h2></div></div>
+        <div className="section-intro content-shell"><div><h2 id="challenge-title"><LetterReveal text="Cada área, uma descoberta." delay={0.16} /></h2></div></div>
         <div className="cardstage-shell" onPointerDownCapture={() => setBackgroundPaused(true)} onPointerUpCapture={() => setBackgroundPaused(false)} onPointerCancelCapture={() => setBackgroundPaused(false)}><CardStackDemo activeIndex={active} onChangeIndex={changeIndex} /></div>
         <div className="challenge-tabs content-shell" role="group" aria-label="Áreas dos desafios">
           {projects.map((project, index) => { const TabIcon = icons[index]; return <button key={project.id} type="button" aria-pressed={active === index} onClick={() => setActive(index)} className={active === index ? "challenge-tab selected" : "challenge-tab"}><TabIcon size={14} /><span>{project.title}</span></button>; })}
@@ -56,7 +57,7 @@ export default function Portfolio() {
           <div className="project-detail-shell" aria-live="polite" aria-atomic="true">
             <AnimatePresence mode="wait" initial={false}>
               <motion.article key={selected.id} className="project-detail" initial={{ opacity: reduceMotion ? 1 : 0 }} animate={{ opacity: 1 }} exit={{ opacity: reduceMotion ? 1 : 0 }} transition={{ duration: reduceMotion ? 0 : 0.13 }} aria-labelledby="project-title">
-                <div className="detail-heading"><div className="detail-icon"><Icon size={20} strokeWidth={1.7} /></div><div><span className="detail-label">DESAFIO {String(active + 1).padStart(2, "0")} / 06</span><h3 id="project-title">{selected.title}</h3></div><span className="detail-tag">{selected.configured ? <><Check size={12} /> Entrega vinculada</> : "Link a adicionar"}</span></div>
+                <div className="detail-heading"><div className="detail-icon"><Icon size={20} strokeWidth={1.7} /></div><div><span className="detail-label">DESAFIO {String(active + 1).padStart(2, "0")} / 06</span><h3 id="project-title"><LetterReveal text={selected.title} /></h3></div><span className="detail-tag">{selected.configured ? <><Check size={12} /> Entrega vinculada</> : "Link a adicionar"}</span></div>
                 <div className="detail-body"><div><p className="detail-description">{selected.details}</p>{selected.technologies.length > 0 && <div className="technology-tags">{selected.technologies.map(technology => <span key={technology}>{technology}</span>)}</div>}{selected.evidence && <p className="evidence-note"><FlaskConical size={13} />{selected.evidence}</p>}</div>
                   <div className="detail-actions">{selected.links.length ? selected.links.map((link, index) => <Button key={link.url} asChild variant={index === 0 ? "default" : "outline"}><a href={link.url} target="_blank" rel="noreferrer">{link.label.toLowerCase().includes("relatório") ? <FileText size={14} /> : null}{link.label}<ArrowUpRight size={14} /></a></Button>) : <div className="pending-delivery"><FileText size={20} strokeWidth={1.5} /><p>O link desta entrega<br />será adicionado aqui.</p></div>}</div>
                 </div>
