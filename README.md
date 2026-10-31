@@ -172,4 +172,6 @@ O CardStack foi adaptado do código fornecido pelo usuário. O estilo foi defini
 
 O componente fornecido foi integrado em `components/ui/shader-metal.tsx` como fundo fixo, sem interceptar cliques. O estado do tema do portal é passado explicitamente ao shader: no modo claro, usa a iluminação de estúdio clara; no escuro, usa a iluminação de palco escura. Não depende de uma classe no elemento HTML para acompanhar o botão de tema.
 
-O fundo limita a resolução e a taxa de desenho a 30 quadros por segundo, pausa em abas ocultas e respeita a preferência por menos movimento. Em alto contraste ou com menos transparência, fica oculto para priorizar a leitura. Se WebGL não estiver disponível, o fundo estático permanece. O nome do topo foi ajustado para “Davi Rosendo”, sem ponto.
+O fundo limita a resolução e a taxa de desenho a 24 quadros por segundo, pausa em abas ocultas e respeita a preferência por menos movimento. Em alto contraste ou com menos transparência, fica oculto para priorizar a leitura. Se WebGL não estiver disponível, o fundo estático permanece. O nome do topo foi ajustado para “Davi Rosendo”, sem ponto.
+
+A renderização do fundo também pausa durante interações com os cartões e volta ao soltar o ponteiro. O teste de arraste confere essa pausa e a retomada, além da troca de cartão. Esse teste tem orçamento de 60 segundos para execução com GPU por software no CI; os demais mantêm 30 segundos.

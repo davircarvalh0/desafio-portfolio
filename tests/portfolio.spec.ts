@@ -6,7 +6,7 @@ const preview = pathToFileURL(resolve("preview/index.html")).href;
 
 test.beforeEach(async ({ page }) => {
   await page.goto(preview);
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Por Davi Rosendo Carvalho");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Davi Rosendo");
 });
 
 test("seleciona desafios e preserva links e PDF", async ({ page }, info) => {
@@ -42,6 +42,8 @@ test("navega por teclado e pelos indicadores", async ({ page }) => {
 });
 
 test("arraste troca o cartão sem o clique desfazer a seleção", async ({ page }) => {
+  // Orçamento próprio para o Chromium com renderização por software no CI.
+  test.setTimeout(60_000);
   const card = page.locator('[data-card="dados"][data-active="true"]');
   await card.scrollIntoViewIfNeeded();
   await expect(card).toBeVisible();
@@ -51,8 +53,11 @@ test("arraste troca o cartão sem o clique desfazer a seleção", async ({ page 
   const start = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
   await page.mouse.move(start.x, start.y);
   await page.mouse.down();
-  await page.mouse.move(start.x - Math.min(190, box.width * 0.7), start.y, { steps: 18 });
+  const background = page.locator('[data-slot="shader-metal"] canvas');
+  await expect(background).toHaveAttribute("data-shader-paused", "true");
+  await page.mouse.move(start.x - Math.min(190, box.width * 0.7), start.y, { steps: 6 });
   await page.mouse.up();
+  await expect(background).toHaveAttribute("data-shader-paused", "false");
   await expect(page.locator(".project-detail").getByRole("heading", { name: "Marketing", exact: true, level: 3 })).toBeVisible();
   await page.waitForTimeout(400);
   await expect(page.locator('[data-card="marketing"][data-active="true"]')).toHaveCount(1);

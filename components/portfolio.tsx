@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Github, FileText, FlaskConical, Layers3, BarChart3, Megaphone, Code2, UsersRound, Shapes, Handshake, Moon, Sun, Check } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
@@ -13,6 +13,17 @@ const icons = [BarChart3, Megaphone, Code2, UsersRound, Shapes, Handshake];
 export default function Portfolio() {
   const [active, setActive] = useState(0);
   const [dark, setDark] = useState(false);
+  const [backgroundPaused, setBackgroundPaused] = useState(false);
+  useEffect(() => {
+    if (!backgroundPaused) return;
+    const resume = () => setBackgroundPaused(false);
+    window.addEventListener("pointerup", resume);
+    window.addEventListener("pointercancel", resume);
+    return () => {
+      window.removeEventListener("pointerup", resume);
+      window.removeEventListener("pointercancel", resume);
+    };
+  }, [backgroundPaused]);
   const reduceMotion = useReducedMotion();
   const selected = projects[active];
   const Icon = icons[active];
@@ -21,7 +32,7 @@ export default function Portfolio() {
   return <div className={dark ? "portfolio dark" : "portfolio"}>
     <div className="ambient" aria-hidden="true" />
     <div className="metal-background" aria-hidden="true" data-theme={dark ? "dark" : "light"}>
-      <ShaderMetal metal="chrome" theme={dark ? "dark" : "light"} ribbons={3} speed={reduceMotion ? 0 : 0.18} iridescence={0.16} interactive={!reduceMotion} />
+      <ShaderMetal paused={backgroundPaused} metal="chrome" theme={dark ? "dark" : "light"} ribbons={3} speed={reduceMotion ? 0 : 0.18} iridescence={0.16} interactive={!reduceMotion} />
     </div>
     <a className="skip-link" href="#desafios">Ir para os desafios</a>
     <header className="site-header">
@@ -33,11 +44,11 @@ export default function Portfolio() {
     </header>
     <main id="inicio">
       <section className="hero content-shell" aria-labelledby="hero-title">
-        <h1 id="hero-title" className="hero-signature">Por Davi Rosendo Carvalho</h1>
+        <div className="hero-identity"><h1 id="hero-title" className="hero-signature">Davi Rosendo <span>Carvalho</span></h1></div>
       </section>
       <section id="desafios" className="challenge-section" aria-labelledby="challenge-title">
         <div className="section-intro content-shell"><div><h2 id="challenge-title">Cada área, uma descoberta.</h2></div></div>
-        <div className="cardstage-shell"><CardStackDemo activeIndex={active} onChangeIndex={changeIndex} /></div>
+        <div className="cardstage-shell" onPointerDownCapture={() => setBackgroundPaused(true)} onPointerUpCapture={() => setBackgroundPaused(false)} onPointerCancelCapture={() => setBackgroundPaused(false)}><CardStackDemo activeIndex={active} onChangeIndex={changeIndex} /></div>
         <div className="challenge-tabs content-shell" role="group" aria-label="Áreas dos desafios">
           {projects.map((project, index) => { const TabIcon = icons[index]; return <button key={project.id} type="button" aria-pressed={active === index} onClick={() => setActive(index)} className={active === index ? "challenge-tab selected" : "challenge-tab"}><TabIcon size={14} /><span>{project.title}</span></button>; })}
         </div>

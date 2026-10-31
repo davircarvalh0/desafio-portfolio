@@ -8,6 +8,8 @@ export type ShaderMetalTheme = "light" | "dark" | "auto"
 export type ShaderMetalMetal = "chrome" | "gold" | "copper" | "graphite"
 
 export type ShaderMetalOptions = {
+  /** Suspende o desenho sem desmontar o canvas. */
+  paused?: boolean
   /** Which metal the ribbons are cast in. Default `chrome`. */
   metal?: ShaderMetalMetal
   /** Custom metal tint, any CSS hex. Wins over `metal`. */
@@ -325,7 +327,7 @@ function compile(gl: WebGLRenderingContext, type: number, source: string) {
 }
 
 /** Most pixels we'll shade per frame; past this the canvas renders softer. */
-const MAX_PIXELS = 1_400_000
+const MAX_PIXELS = 900_000
 /** Where the key light rests when the pointer is away: up and to the left. */
 const REST_LIGHT = { x: -0.45, y: 0.55 }
 
@@ -356,6 +358,7 @@ export function createShaderMetal(
   let dark = resolveDark(options.theme ?? "auto")
   let darkMix = dark ? 1 : 0
   canvas.dataset.shaderTheme = dark ? "dark" : "light"
+  canvas.dataset.shaderPaused = options.paused ? "true" : "false"
   options.onThemeChange?.(dark)
 
   const gl = canvas.getContext("webgl", {
@@ -490,7 +493,7 @@ export function createShaderMetal(
 
   function wake() {
     // An observer callback can still arrive after destroy.
-    if (raf || destroyed || lost) return
+    if (raf || destroyed || lost || options.paused) return
     last = performance.now()
     raf = requestAnimationFrame(tick)
   }
@@ -507,9 +510,9 @@ export function createShaderMetal(
   // An arrow, not a declaration, so TypeScript keeps `gl` narrowed inside.
   const tick = (now: number) => {
     raf = 0
-    if (lost) return
-    // Fundo decorativo: limita a 30 quadros por segundo sem alterar o relógio.
-    if (!mqReduce.matches && now - lastDraw < 1000 / 30) {
+    if (lost || options.paused) return
+    // Fundo decorativo: limita a 24 quadros por segundo sem alterar o relógio.
+    if (!mqReduce.matches && now - lastDraw < 1000 / 24) {
       raf = requestAnimationFrame(tick)
       return
     }
@@ -595,7 +598,7 @@ export function createShaderMetal(
   mqDark.addEventListener("change", syncTheme)
 
   const onMove = (e: PointerEvent) => {
-    if (options.interactive === false) return
+    if (options.interactive === false || options.paused) return
     const rect = canvas.getBoundingClientRect()
     if (rect.width <= 0 || rect.height <= 0) return
     const x = (e.clientX - rect.left) / rect.width
@@ -638,6 +641,11 @@ export function createShaderMetal(
   return {
     setOptions(next) {
       options = { ...options, ...next }
+      canvas.dataset.shaderPaused = options.paused ? "true" : "false"
+      if (options.paused) {
+        cancelAnimationFrame(raf)
+        raf = 0
+      }
       if (options.interactive === false) {
         pullTarget = 0
         lightTarget.x = REST_LIGHT.x
@@ -690,6 +698,7 @@ export function ShaderMetal({
   speed = DEFAULT_SPEED,
   iridescence = DEFAULT_IRIDESCENCE,
   interactive = true,
+  paused = false,
   theme = "auto",
 }: ShaderMetalProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -705,6 +714,7 @@ export function ShaderMetal({
       speed,
       iridescence,
       interactive,
+      paused,
       theme,
     })
     canvas.dataset.renderer = instanceRef.current ? "webgl" : "fallback"
@@ -724,9 +734,10 @@ export function ShaderMetal({
       speed,
       iridescence,
       interactive,
+      paused,
       theme,
     })
-  }, [metal, color, ribbons, speed, iridescence, interactive, theme])
+  }, [metal, color, ribbons, speed, iridescence, interactive, paused, theme])
 
   return (
     <div
