@@ -1,0 +1,60 @@
+name: Publicar portfólio no GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      NEXT_PUBLIC_BASE_PATH: /desafio-portfolio
+      NEXT_TELEMETRY_DISABLED: '1'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Instalar as dependências fixadas
+        run: npm ci
+      - name: Gerar site estático
+        run: npm run build
+      - name: Verificar TypeScript
+        run: npm run typecheck
+      - name: Gerar prévia para os testes
+        run: npm run preview:html
+      - name: Preparar navegador de testes
+        run: npx playwright install --with-deps chromium
+      - name: Verificar navegação, arraste e layout
+        run: npm test
+      - name: Guardar detalhes em caso de falha
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: testes-portfolio
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 7
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: out
+      - uses: actions/deploy-pages@v4
+        id: deployment

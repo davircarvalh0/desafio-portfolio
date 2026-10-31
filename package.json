@@ -1,0 +1,35 @@
+{
+  "name": "desafio-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --hostname 0.0.0.0",
+    "build": "next build --webpack",
+    "typecheck": "tsc --noEmit",
+    "preview": "node scripts/serve.mjs",
+    "preview:html": "node scripts/build-preview.mjs",
+    "test": "playwright test"
+  },
+  "dependencies": {
+    "next": "16.4.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "framer-motion": "^12.0.0",
+    "lucide-react": "^0.577.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.0.0",
+    "@radix-ui/react-slot": "^1.2.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/node": "^22.0.0",
+    "tailwindcss": "^4.0.0",
+    "@tailwindcss/postcss": "^4.0.0",
+    "postcss": "^8.5.0",
+    "esbuild": "^0.25.0",
+    "@playwright/test": "^1.58.0"
+  }
+}
