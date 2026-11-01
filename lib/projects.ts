@@ -81,13 +81,13 @@ const records: Project[] = [
   {
     "id": "gente-e-gestao",
     "title": "Gente e Gestão",
-    "description": "A entrega de Gente e Gestão ainda não foi vinculada a este portal.",
-    "details": "Espaço para apresentar a proposta do desafio de Gente e Gestão, a entrega realizada e os principais aprendizados.",
-    "tag": "Desafio CITi",
-    "technologies": [],
+    "description": "Squad Aurora · diagnóstico e plano de ação",
+    "details": "Análise do clima e do impacto financeiro do projeto do Squad Aurora, com distribuição das horas extras, plano de ação e roteiro de conversas individuais. Consulte a entrega completa em PDF.",
+    "tag": "Relatório em PDF",
+    "technologies": ["Diagnóstico de clima", "Análise financeira", "Plano de ação"],
     "evidence": "",
-    "configured": false,
-    "links": [],
+    "configured": true,
+    "links": [{"label": "Ler relatório em PDF", "url": "entregas/relatorio-gente-e-gestao.pdf"}],
     "imageSrc": "images/gente-e-gestao.jpg"
   },
   {

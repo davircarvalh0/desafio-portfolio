@@ -26,6 +26,10 @@ test("seleciona desafios e preserva links e PDF", async ({ page }, info) => {
   await expect(page.locator(".project-detail").getByRole("heading", { name: "Desenvolvimento", exact: true, level: 3 })).toBeVisible();
   await expect(page.getByRole("link", { name: "Ler relatório em PDF", exact: true })).toHaveAttribute("href", /relatorio-desenvolvimento\.pdf$/);
   await expect(page.getByRole("link", { name: "Ver repositório", exact: true })).toHaveAttribute("href", "https://github.com/davircarvalh0/repositorio-desafio-dev");
+  await areas.getByRole("button", { name: "Gente e Gestão", exact: true }).click();
+  await expect(page.locator(".project-detail").getByRole("heading", { name: "Gente e Gestão", exact: true, level: 3 })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Ler relatório em PDF", exact: true })).toHaveAttribute("href", /relatorio-gente-e-gestao\.pdf$/);
+  await expect(page.locator(".pending-delivery")).toHaveCount(0);
 });
 
 test("navega por teclado e pelos indicadores", async ({ page }) => {
@@ -65,8 +69,8 @@ test("arraste troca o cartão sem o clique desfazer a seleção", async ({ page 
 
 test("layout não cria rolagem horizontal e não inventa links pendentes", async ({ page }) => {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBeTruthy();
-  await page.getByRole("group", { name: "Áreas dos desafios" }).getByRole("button", { name: "Gente e Gestão", exact: true }).click();
-  await expect(page.locator(".project-detail").getByRole("heading", { name: "Gente e Gestão", exact: true, level: 3 })).toBeVisible();
+  await page.getByRole("group", { name: "Áreas dos desafios" }).getByRole("button", { name: "Produto", exact: true }).click();
+  await expect(page.locator(".project-detail").getByRole("heading", { name: "Produto", exact: true, level: 3 })).toBeVisible();
   await expect(page.locator(".pending-delivery")).toBeVisible();
   await expect(page.locator(".detail-actions a")).toHaveCount(0);
 });
