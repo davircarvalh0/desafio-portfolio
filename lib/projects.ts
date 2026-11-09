@@ -1,13 +1,14 @@
 import type { CardStackItem } from "@/components/ui/card-stack";
 export type ProjectLink = { label: string; url: string };
-export type Project = CardStackItem & { details: string; tag: string; technologies: string[]; evidence: string; configured: boolean; links: ProjectLink[] };
+export type Project = CardStackItem & { headline: string; details: string; tag: string; technologies: string[]; evidence: string; configured: boolean; links: ProjectLink[] };
 export const assetPath = (path: string) => path.startsWith("data:") ? path : `${process.env.NEXT_PUBLIC_BASE_PATH || ""}/${path.replace(/^\//, "")}`;
 const records: Project[] = [
   {
     "id": "dados",
+    "headline": "Da análise ao relatório.",
     "title": "Dados",
     "description": "Notebook no Google Colab e relatório da entrega",
-    "details": "A entrega de Dados reúne um notebook no Google Colab e um relatório. Os dois materiais estão disponíveis nos links abaixo.",
+    "details": "Explore o trabalho no notebook do Google Colab ou leia o relatório que acompanha a entrega.",
     "tag": "Notebook e relatório",
     "technologies": [
       "Google Colab",
@@ -29,9 +30,10 @@ const records: Project[] = [
   },
   {
     "id": "marketing",
+    "headline": "A proposta em um documento.",
     "title": "Marketing",
     "description": "Documento com a entrega do desafio",
-    "details": "O documento da entrega de Marketing pode ser consultado pelo link abaixo.",
+    "details": "A entrega de Marketing está reunida em um documento para consulta.",
     "tag": "Documento da entrega",
     "technologies": [
       "Documento"
@@ -48,6 +50,7 @@ const records: Project[] = [
   },
   {
     "id": "desenvolvimento",
+    "headline": "Uma API para a Folhagem & Cia.",
     "title": "Desenvolvimento",
     "description": "Folhagem & Cia · API e evidências dos testes",
     "details": "API de uma loja de plantas com cadastro, edição parcial, filtros, vendas e cálculo do estoque. A entrega inclui os quatro bônus do desafio, proteção para vendas simultâneas e uma página de evidências dos testes.",
@@ -80,6 +83,7 @@ const records: Project[] = [
   },
   {
     "id": "gente-e-gestao",
+    "headline": "Do diagnóstico ao plano de ação.",
     "title": "Gente e Gestão",
     "description": "Squad Aurora · diagnóstico e plano de ação",
     "details": "Análise do clima e do impacto financeiro do projeto do Squad Aurora, com distribuição das horas extras, plano de ação e roteiro de conversas individuais. Consulte a entrega completa em PDF.",
@@ -92,27 +96,38 @@ const records: Project[] = [
   },
   {
     "id": "produto",
+    "headline": "A clínica que perde consultas.",
     "title": "Produto",
-    "description": "A entrega de Produto ainda não foi vinculada a este portal.",
-    "details": "Espaço para apresentar a proposta do desafio de Produto, a entrega realizada e os principais aprendizados.",
-    "tag": "Desafio CITi",
-    "technologies": [],
+    "description": "Enunciado do desafio de Produto · PTC 2026.2",
+    "details": "O caso da Clínica Movimento propõe investigar as faltas em sessões de fisioterapia, testar uma solução e montar uma proposta para a rede.",
+    "tag": "Enunciado em PDF",
+    "technologies": ["Investigação do problema", "Validação de solução", "Proposta"],
     "evidence": "",
     "configured": false,
-    "links": [],
+    "links": [{"label": "Ler enunciado em PDF", "url": "entregas/enunciado-produto-clinica.pdf"}],
     "imageSrc": "images/produto.jpg"
   },
   {
     "id": "comercial",
+    "headline": "Da prospecção à reunião de diagnóstico.",
     "title": "Comercial",
-    "description": "A entrega de Comercial ainda não foi vinculada a este portal.",
-    "details": "Espaço para apresentar a proposta do desafio de Comercial, a entrega realizada e os principais aprendizados.",
-    "tag": "Desafio CITi",
-    "technologies": [],
+    "description": "Dois desafios · prospecção e diagnóstico comercial",
+    "details": "O primeiro desafio avalia três empresas e formula hipóteses de fit com o CITi. O segundo aprofunda o caso da Frango Dourado com um roteiro de diagnóstico e perguntas SPIN.",
+    "tag": "Duas entregas em PDF",
+    "technologies": ["Prospecção", "Hipóteses de fit", "SPIN Selling"],
     "evidence": "",
-    "configured": false,
-    "links": [],
+    "configured": true,
+    "links": [
+      {"label": "Ler primeiro desafio (PDF)", "url": "entregas/desafio-comercial-1.pdf"},
+      {"label": "Ler segundo desafio (PDF)", "url": "entregas/desafio-comercial-2.pdf"}
+    ],
     "imageSrc": "images/comercial.jpg"
   }
 ];
-export const projects: Project[] = records.map(project => ({...project, imageSrc: assetPath(project.imageSrc!), href: project.links[0]?.url, links: project.links.map(link => ({...link, url: link.url.startsWith('entregas/') ? assetPath(link.url) : link.url}))}));
+export const projects: Project[] = records.map(project => {
+  const links = project.links.map(link => ({
+    ...link,
+    url: link.url.startsWith("entregas/") ? assetPath(link.url) : link.url,
+  }));
+  return { ...project, imageSrc: assetPath(project.imageSrc!), href: links[0]?.url, links };
+});

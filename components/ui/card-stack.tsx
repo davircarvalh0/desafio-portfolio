@@ -147,6 +147,7 @@ export function CardStack<T extends CardStackItem>({
                   animate={{ opacity: 1, x: off * spacing, y: abs * 7 + (isActive ? -activeLiftPx : 0), z: reduceMotion ? 0 : -abs * depthPx,
                     rotateZ: reduceMotion ? 0 : off * stepDeg, rotateX: reduceMotion || isActive ? 0 : tiltXDeg,
                     scale: isActive ? activeScale : inactiveScale }}
+                  whileHover={reduceMotion ? undefined : { scale: isActive ? activeScale + 0.025 : inactiveScale + 0.04 }}
                   exit={{ opacity: 0, transition: { duration: reduceMotion ? 0 : 0.12 } }}
                   transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: springStiffness, damping: springDamping }}
                   onPointerDown={() => { didDrag.current = false; }}
@@ -184,7 +185,7 @@ export function CardStack<T extends CardStackItem>({
 }
 
 function DefaultFanCard({ item, active }: { item: CardStackItem; active: boolean }) {
-  return <div className="relative h-full w-full">
+  return <div className="fan-card-content relative h-full w-full">
     {item.imageSrc ? <img src={item.imageSrc} alt={`Imagem ilustrativa de ${item.title}`} className="absolute inset-0 h-full w-full object-cover" draggable={false} loading="eager" /> : <div className="absolute inset-0 bg-secondary" />}
     <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/10 to-black/5" />
     <div className="card-topline"><span>{item.tag || "Desafio CITi"}</span><span className="card-corner" aria-hidden="true"><SquareArrowOutUpRight size={15} /></span></div>

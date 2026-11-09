@@ -11,3 +11,9 @@ test-results/
 Thumbs.db
 legacy/
 entregas/
+!public/entregas/
+public/entregas/*
+!public/entregas/desafio-comercial-1.pdf
+!public/entregas/desafio-comercial-2.pdf
+!public/entregas/enunciado-produto-clinica.pdf
+!public/entregas/relatorio-gente-e-gestao.pdf

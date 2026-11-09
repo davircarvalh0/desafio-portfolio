@@ -1,4 +1,5 @@
-import React from "react";
 import { createRoot } from "react-dom/client";
 import Portfolio from "../components/portfolio";
-createRoot(document.getElementById("root")!).render(<Portfolio />);
+
+const root = document.getElementById("root")!;
+createRoot(root).render(<Portfolio screen={root.dataset.screen === "challenges" ? "challenges" : "home"} preview={{ home: root.dataset.home || "index.html" }} />);
